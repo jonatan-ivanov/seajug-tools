@@ -1,16 +1,25 @@
 #! /usr/bin/env groovy
 
+import groovy.cli.picocli.*
 import groovy.json.*
 import groovy.xml.*
 import java.time.*
 
-int MAX_SIZE = 5
+CliBuilder cli = new CliBuilder(name:'past-events')
+cli.with {
+    _ longOpt: 'limit', args: 1, required: true, type: int, argName: 'limit', 'Max number of past events'
+    _ longOpt: 'help', 'print this message'
+}
+
+OptionAccessor options = cli.parse(args)
+if (options == null) System.exit(1)
+
 
 def eventsApi = 'https://api.meetup.com/seajug/events?&sign=true&photo-host=public&page=200&status=past&desc=true'
 def rs = new JsonSlurper().parseText(eventsApi.toURL().text)
 
 new MarkupBuilder().content {
-    rs.take(MAX_SIZE).groupBy { toLocalDate(it.time).year }.each { group ->
+    rs.take(options.limit).groupBy { toLocalDate(it.time).year }.each { group ->
         h2(group.key)
         ul {
             group.value.each { event ->
