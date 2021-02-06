@@ -1,5 +1,8 @@
 #! /usr/bin/env groovy
 
+@GrabConfig(systemClassLoader=true)
+@Grab('org.codehaus.groovy:groovy-cli-picocli:3.+')
+
 import groovy.cli.picocli.*
 import groovy.json.*
 import groovy.xml.*
