@@ -31,11 +31,7 @@ new MarkupBuilder().content {
                     a(href: event.link, "${toLocalDate(event.time)} $event.name")
                     if (comment) {
                         getInfoMap(comment).each { key, value ->
-                            a(href: value) {
-                                mkp.yieldUnescaped("&#91;")
-                                mkp.yield(key)
-                                mkp.yieldUnescaped("&#93;")
-                            }
+                            a(href: value) { mkp.yield("($key)") }
                         }
                     }
                 }
